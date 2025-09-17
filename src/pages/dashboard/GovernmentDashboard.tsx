@@ -36,7 +36,10 @@ import {
   Verified,
   AlertTriangle,
   Brain,
-  UserCog
+  UserCog,
+  Bell,
+  Edit3,
+  Settings
 } from 'lucide-react';
 
 import { UtilityBar } from '@/components/shared/UtilityBar';
@@ -644,31 +647,122 @@ const GovernmentDashboard = () => {
           </TabsContent>
 
           <TabsContent value="institutions" className="space-y-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold">Institution Registry & Comparison</h2>
+                <p className="text-muted-foreground">Comprehensive institution management and performance analysis</p>
+              </div>
+              <div className="flex space-x-2">
+                <Button variant="outline" onClick={() => handleDownloadReport('Institution Registry')}>
+                  <Download className="h-4 w-4 mr-2" />
+                  Export Registry
+                </Button>
+              </div>
+            </div>
+
+            {/* Filters and Search */}
+            <Card className="glass-card">
+              <CardContent className="p-6">
+                <div className="flex flex-wrap gap-4">
+                  <div className="flex items-center space-x-2 flex-1 min-w-64">
+                    <Search className="h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Search institutions..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="flex-1"
+                    />
+                  </div>
+                  <Select value={selectedState} onValueChange={setSelectedState}>
+                    <SelectTrigger className="w-48">
+                      <SelectValue placeholder="Select State" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All States</SelectItem>
+                      <SelectItem value="Delhi">Delhi</SelectItem>
+                      <SelectItem value="Maharashtra">Maharashtra</SelectItem>
+                      <SelectItem value="Karnataka">Karnataka</SelectItem>
+                      <SelectItem value="Tamil Nadu">Tamil Nadu</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select value={selectedInstituteType} onValueChange={setSelectedInstituteType}>
+                    <SelectTrigger className="w-48">
+                      <SelectValue placeholder="Institution Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Types</SelectItem>
+                      <SelectItem value="Technical">Technical</SelectItem>
+                      <SelectItem value="University">University</SelectItem>
+                      <SelectItem value="Medical">Medical</SelectItem>
+                      <SelectItem value="Arts">Arts</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Institution List */}
             <Card className="glass-card">
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <Building2 className="h-5 w-5 mr-2 text-government-primary" />
-                  Institution Comparison & Regional Analytics
+                  <Building className="h-5 w-5 mr-2 text-government-primary" />
+                  Registered Institutions
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {['North Zone', 'South Zone', 'East Zone', 'West Zone', 'Central Zone', 'Northeast Zone'].map((zone) => (
-                    <div key={zone} className="p-4 rounded-lg bg-government-primary/5">
-                      <h4 className="font-medium mb-2 flex items-center">
-                        <MapPin className="h-4 w-4 mr-1" />
-                        {zone}
-                      </h4>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span>Institutions:</span>
-                          <span className="font-medium">{Math.floor(Math.random() * 50) + 20}</span>
+                <div className="space-y-4">
+                  {filteredInstitutions.map((institution) => (
+                    <div key={institution.id} className="p-4 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors cursor-pointer"
+                         onClick={() => handleInstitutionDrillDown(institution.id)}>
+                      <div className="flex items-center justify-between mb-3">
+                        <div>
+                          <h4 className="font-medium text-lg">{institution.name}</h4>
+                          <p className="text-sm text-muted-foreground">
+                            {institution.state} • {institution.type} • {institution.students.toLocaleString()} students
+                          </p>
                         </div>
-                        <div className="flex justify-between">
-                          <span>Avg Performance:</span>
-                          <span className="font-medium">{(Math.random() * 20 + 75).toFixed(1)}%</span>
+                        <div className="flex items-center space-x-2">
+                          {institution.blockchainVerified && (
+                            <Badge className="bg-purple-100 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400">
+                              <Verified className="h-3 w-3 mr-1" />
+                              Verified
+                            </Badge>
+                          )}
+                          <Badge variant={
+                            institution.status === 'excellent' ? 'default' :
+                            institution.status === 'good' ? 'secondary' :
+                            'destructive'
+                          }>
+                            {institution.status === 'excellent' ? '✅ Compliant' :
+                             institution.status === 'good' ? '⚠️ Under Review' :
+                             '❌ Non-Compliant'}
+                          </Badge>
                         </div>
-                        <Progress value={Math.random() * 30 + 70} className="h-2" />
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                        <div>
+                          <span className="text-muted-foreground">NIRF Rank:</span>
+                          <p className="font-medium">#{institution.nirf}</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">NAAC Grade:</span>
+                          <p className="font-medium">{institution.naac}</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Attendance:</span>
+                          <p className="font-medium">{institution.attendance}%</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Compliance:</span>
+                          <p className="font-medium">{institution.compliance}%</p>
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
+                          <span>Compliance Progress</span>
+                          <span>{institution.compliance}%</span>
+                        </div>
+                        <Progress value={institution.compliance} className="h-2" />
                       </div>
                     </div>
                   ))}
@@ -677,28 +771,610 @@ const GovernmentDashboard = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="blockchain" className="space-y-6">
-...
-          </TabsContent>
+          <TabsContent value="attendance" className="space-y-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold">National Attendance Monitoring</h2>
+                <p className="text-muted-foreground">State-wise and institution-wise attendance analysis with AI insights</p>
+              </div>
+              <Button className="gradient-government" onClick={() => window.open('/government-attendance', '_blank')}>
+                <Map className="h-4 w-4 mr-2" />
+                Detailed Heatmap
+              </Button>
+            </div>
 
-          <TabsContent value="analytics" className="space-y-6">
+            {/* State-wise Heatmap */}
             <Card className="glass-card">
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <BarChart3 className="h-5 w-5 mr-2 text-government-primary" />
-                  National-Level Analytics Dashboard
+                  <Map className="h-5 w-5 mr-2 text-government-primary" />
+                  State-wise Attendance Heatmap
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="h-64 flex items-center justify-center bg-muted/20 rounded-lg">
-                  <div className="text-center">
-                    <Globe className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-lg font-medium">National Education Heatmap</p>
-                    <p className="text-sm text-muted-foreground">Interactive visualization of education metrics across states</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {statePerformance.map((state) => (
+                    <div key={state.state} className={`p-4 rounded-lg border cursor-pointer transition-colors ${
+                      state.avgAttendance >= 80 ? 'bg-green-50/50 border-green-200 dark:bg-green-950/20' :
+                      state.avgAttendance >= 75 ? 'bg-blue-50/50 border-blue-200 dark:bg-blue-950/20' :
+                      state.avgAttendance >= 70 ? 'bg-yellow-50/50 border-yellow-200 dark:bg-yellow-950/20' :
+                      'bg-red-50/50 border-red-200 dark:bg-red-950/20'
+                    }`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-medium">{state.state}</h4>
+                        <Badge variant="outline">#{state.rank}</Badge>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span>Institutions:</span>
+                          <span className="font-medium">{state.institutions}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span>Avg Attendance:</span>
+                          <span className="font-medium">{state.avgAttendance}%</span>
+                        </div>
+                        <Progress value={state.avgAttendance} className="h-2" />
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <span>Compliance: {state.compliance}%</span>
+                          <span>{state.avgAttendance >= 80 ? 'Excellent' : state.avgAttendance >= 75 ? 'Good' : 'Needs Attention'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* AI Predictions */}
+            <Card className="glass-card border-purple-200/50">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Brain className="h-5 w-5 mr-2 text-purple-500" />
+                  AI Attendance Predictions
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="p-4 rounded-lg bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200/50">
+                    <h4 className="font-medium mb-2 flex items-center">
+                      <TrendingUp className="h-4 w-4 mr-2 text-purple-600" />
+                      Regional Trend Forecast
+                    </h4>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      AI predicts 12% improvement in South Indian states' attendance by next semester
+                    </p>
+                    <Badge className="bg-purple-100 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400">
+                      High Confidence (87%)
+                    </Badge>
+                  </div>
+                  <div className="p-4 rounded-lg bg-orange-50/50 dark:bg-orange-950/20 border border-orange-200/50">
+                    <h4 className="font-medium mb-2 flex items-center">
+                      <AlertTriangle className="h-4 w-4 mr-2 text-orange-600" />
+                      Risk Alert
+                    </h4>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      3 technical institutes in Gujarat at risk of falling below 65% attendance threshold
+                    </p>
+                    <Badge className="bg-orange-100 text-orange-700 dark:bg-orange-900/20 dark:text-orange-400">
+                      Action Required
+                    </Badge>
                   </div>
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="reports" className="space-y-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold">Blockchain-Verified National Reports</h2>
+                <p className="text-muted-foreground">Tamper-proof, auditable reports with drill-down capabilities</p>
+              </div>
+            </div>
+
+            {/* Blockchain Reports */}
+            <Card className="glass-card border-purple-200/50">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Shield className="h-5 w-5 mr-2 text-purple-500" />
+                  Blockchain-Verified Reports
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {blockchainReports.map((report) => (
+                    <div key={report.id} className="p-4 rounded-lg border bg-purple-50/50 dark:bg-purple-950/20 border-purple-200/50">
+                      <div className="flex items-center justify-between mb-3">
+                        <div>
+                          <h4 className="font-medium">{report.title}</h4>
+                          <p className="text-sm text-muted-foreground">
+                            {report.records.toLocaleString()} records • Generated: {report.date}
+                          </p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Badge className="bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                            <Verified className="h-3 w-3 mr-1" />
+                            Verified
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <code className="text-xs bg-muted px-2 py-1 rounded">{report.hash}</code>
+                        <div className="flex space-x-2">
+                          <Button size="sm" variant="outline">
+                            <Eye className="h-4 w-4 mr-2" />
+                            View Details
+                          </Button>
+                          <Button size="sm" onClick={() => handleDownloadReport(report.title)}>
+                            <Download className="h-4 w-4 mr-2" />
+                            Download
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* National Reports */}
+            <Card className="glass-card">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <FileText className="h-5 w-5 mr-2 text-government-primary" />
+                  National Education Reports
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {nationalReports.map((report) => (
+                    <div key={report.id} className="p-4 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors">
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <h4 className="font-medium">{report.title}</h4>
+                          <p className="text-sm text-muted-foreground">
+                            {report.scope === 'country' ? 'National Level' : 
+                             report.scope === 'state' ? 'State-wise Analysis' :
+                             report.scope === 'regional' ? 'Regional Overview' : 'Institutional Level'}
+                          </p>
+                        </div>
+                        <Badge variant="outline">{report.format}</Badge>
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-3">
+                        <div>
+                          <span className="text-muted-foreground">Type:</span>
+                          <p className="font-medium capitalize">{report.type}</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Date:</span>
+                          <p className="font-medium">{report.date}</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Size:</span>
+                          <p className="font-medium">{report.size}</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Scope:</span>
+                          <p className="font-medium">
+                            {typeof report.institutions === 'number' ? `${report.institutions} institutions` : report.institutions}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex space-x-2">
+                        <Button size="sm" onClick={() => handleDownloadReport(report.title)}>
+                          <Download className="h-4 w-4 mr-2" />
+                          Download {report.format}
+                        </Button>
+                        <Button size="sm" variant="outline">
+                          <Eye className="h-4 w-4 mr-2" />
+                          Preview
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="compliance" className="space-y-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold">Automated Compliance Monitoring</h2>
+                <p className="text-muted-foreground">NAAC, NIRF, and AICTE compliance tracking with AI anomaly detection</p>
+              </div>
+            </div>
+
+            {/* Compliance Overview */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className="glass-card">
+                <CardContent className="p-6">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Shield className="h-5 w-5 text-blue-500" />
+                    <h3 className="font-medium">NAAC Compliance</h3>
+                  </div>
+                  <p className="text-2xl font-bold text-blue-600">89.4%</p>
+                  <p className="text-xs text-muted-foreground">institutions compliant</p>
+                  <Progress value={89.4} className="mt-2 h-2" />
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card">
+                <CardContent className="p-6">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Award className="h-5 w-5 text-purple-500" />
+                    <h3 className="font-medium">NIRF Participation</h3>
+                  </div>
+                  <p className="text-2xl font-bold text-purple-600">76.8%</p>
+                  <p className="text-xs text-muted-foreground">eligible institutions</p>
+                  <Progress value={76.8} className="mt-2 h-2" />
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card">
+                <CardContent className="p-6">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <FileCheck className="h-5 w-5 text-green-500" />
+                    <h3 className="font-medium">AICTE Compliance</h3>
+                  </div>
+                  <p className="text-2xl font-bold text-green-600">92.1%</p>
+                  <p className="text-xs text-muted-foreground">technical institutions</p>
+                  <Progress value={92.1} className="mt-2 h-2" />
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Compliance Progress Tracker */}
+            <Card className="glass-card">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Target className="h-5 w-5 mr-2 text-government-primary" />
+                  Institution Progress Tracker
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {institutionComparison.slice(0, 3).map((institution) => (
+                    <div key={institution.id} className="p-4 rounded-lg border bg-muted/20">
+                      <div className="flex items-center justify-between mb-3">
+                        <div>
+                          <h4 className="font-medium">{institution.name}</h4>
+                          <p className="text-sm text-muted-foreground">{institution.state} • {institution.type}</p>
+                        </div>
+                        <Badge variant={institution.compliance >= 95 ? 'default' : institution.compliance >= 85 ? 'secondary' : 'destructive'}>
+                          {institution.compliance}% Compliant
+                        </Badge>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Compliance Progress</span>
+                          <span className="font-medium">{institution.compliance}%</span>
+                        </div>
+                        <Progress value={institution.compliance} className="h-2" />
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                          <span>Last Audit: {institution.lastAudit}</span>
+                          <span>{institution.blockchainVerified ? '✅ Blockchain Verified' : '⚠️ Pending Verification'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* AI Anomaly Detection */}
+            <Card className="glass-card border-red-200/50">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Brain className="h-5 w-5 mr-2 text-red-500" />
+                  AI Anomaly Detection
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="p-3 rounded-lg bg-red-50/50 dark:bg-red-950/20 border border-red-200/50">
+                    <div className="flex items-start space-x-2">
+                      <AlertTriangle className="h-4 w-4 text-red-500 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-medium text-red-700 dark:text-red-400">
+                          Data inconsistency detected in XYZ University report
+                        </p>
+                        <p className="text-xs text-red-600 dark:text-red-500">
+                          Attendance figures don't match faculty submissions • Priority: High
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-3 rounded-lg bg-yellow-50/50 dark:bg-yellow-950/20 border border-yellow-200/50">
+                    <div className="flex items-start space-x-2">
+                      <AlertCircle className="h-4 w-4 text-yellow-500 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-medium text-yellow-700 dark:text-yellow-400">
+                          Unusual attendance pattern in 5 Karnataka institutions
+                        </p>
+                        <p className="text-xs text-yellow-600 dark:text-yellow-500">
+                          Spike in weekend attendance submissions • Priority: Medium
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="notifications" className="space-y-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold">National Compliance Notifications</h2>
+                <p className="text-muted-foreground">Audit alerts, compliance warnings, and system notifications</p>
+              </div>
+              <div className="flex space-x-2">
+                <Button variant="outline" size="sm">
+                  <Filter className="h-4 w-4 mr-2" />
+                  Filter
+                </Button>
+                <Button variant="outline" size="sm">
+                  Mark All Read
+                </Button>
+              </div>
+            </div>
+
+            {/* Notification Categories */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <Card className="glass-card">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <AlertTriangle className="h-5 w-5 text-red-500" />
+                    <div>
+                      <p className="text-2xl font-bold text-red-600">8</p>
+                      <p className="text-xs text-muted-foreground">Critical Alerts</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <FileCheck className="h-5 w-5 text-blue-500" />
+                    <div>
+                      <p className="text-2xl font-bold text-blue-600">15</p>
+                      <p className="text-xs text-muted-foreground">Audit Alerts</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <Calendar className="h-5 w-5 text-orange-500" />
+                    <div>
+                      <p className="text-2xl font-bold text-orange-600">23</p>
+                      <p className="text-xs text-muted-foreground">Deadlines</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                    <div>
+                      <p className="text-2xl font-bold text-green-600">156</p>
+                      <p className="text-xs text-muted-foreground">Completed</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Notifications List */}
+            <Card className="glass-card">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Bell className="h-5 w-5 mr-2 text-government-primary" />
+                  Recent Notifications
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="p-4 rounded-lg bg-red-50/50 dark:bg-red-950/20 border border-red-200/50">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start space-x-3">
+                        <AlertTriangle className="h-5 w-5 text-red-500 mt-0.5" />
+                        <div>
+                          <h4 className="font-medium text-red-700 dark:text-red-400">Critical: NAAC submission deadline approaching</h4>
+                          <p className="text-sm text-red-600 dark:text-red-500 mt-1">
+                            15 institutions have pending NAAC self-assessment reports due by February 15, 2024
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-2">2 hours ago • Maharashtra, Karnataka, Tamil Nadu</p>
+                        </div>
+                      </div>
+                      <Button size="sm" variant="outline">View Details</Button>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200/50">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start space-x-3">
+                        <FileCheck className="h-5 w-5 text-blue-500 mt-0.5" />
+                        <div>
+                          <h4 className="font-medium text-blue-700 dark:text-blue-400">Audit Report Available</h4>
+                          <p className="text-sm text-blue-600 dark:text-blue-500 mt-1">
+                            Compliance audit completed for Delhi region - 45 institutions reviewed
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-2">5 hours ago • Delhi</p>
+                        </div>
+                      </div>
+                      <Button size="sm" variant="outline">Download</Button>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-orange-50/50 dark:bg-orange-950/20 border border-orange-200/50">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start space-x-3">
+                        <AlertCircle className="h-5 w-5 text-orange-500 mt-0.5" />
+                        <div>
+                          <h4 className="font-medium text-orange-700 dark:text-orange-400">Warning: Low Attendance Alert</h4>
+                          <p className="text-sm text-orange-600 dark:text-orange-500 mt-1">
+                            3 colleges flagged for attendance below 60% threshold - immediate intervention required
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-2">1 day ago • Gujarat, Rajasthan</p>
+                        </div>
+                      </div>
+                      <Button size="sm" variant="outline">Take Action</Button>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-green-50/50 dark:bg-green-950/20 border border-green-200/50">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start space-x-3">
+                        <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
+                        <div>
+                          <h4 className="font-medium text-green-700 dark:text-green-400">Success: Blockchain Verification Complete</h4>
+                          <p className="text-sm text-green-600 dark:text-green-500 mt-1">
+                            156 new student achievements verified and added to blockchain ledger
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-2">2 days ago • National</p>
+                        </div>
+                      </div>
+                      <Button size="sm" variant="outline">View Records</Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="profile" className="space-y-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold">Government Official Profile</h2>
+                <p className="text-muted-foreground">Manage your official account and security settings</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Official Details */}
+              <Card className="glass-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <UserCog className="h-5 w-5 mr-2 text-government-primary" />
+                    Official Details
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium">Full Name</label>
+                    <Input value="Dr. Rajesh Kumar Sharma" className="mt-1" />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Official Role</label>
+                    <Input value="Joint Secretary - Higher Education" className="mt-1" />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Ministry</label>
+                    <Input value="Ministry of Education, Government of India" className="mt-1" />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Region Assigned</label>
+                    <Select defaultValue="national">
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="national">National Level</SelectItem>
+                        <SelectItem value="northern">Northern Region</SelectItem>
+                        <SelectItem value="southern">Southern Region</SelectItem>
+                        <SelectItem value="eastern">Eastern Region</SelectItem>
+                        <SelectItem value="western">Western Region</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Official Contact</label>
+                    <Input value="rajesh.sharma@education.gov.in" className="mt-1" />
+                  </div>
+                  <Button className="w-full mt-4">
+                    <Edit3 className="h-4 w-4 mr-2" />
+                    Update Details
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Preferences & Security */}
+              <Card className="glass-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Shield className="h-5 w-5 mr-2 text-government-primary" />
+                    Security & Preferences
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <h4 className="font-medium mb-3">Notification Settings</h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm">Critical Alerts</span>
+                        <Badge className="bg-green-100 text-green-700">Enabled</Badge>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm">Daily Reports</span>
+                        <Badge className="bg-green-100 text-green-700">Enabled</Badge>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm">System Updates</span>
+                        <Badge className="bg-gray-100 text-gray-700">Disabled</Badge>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="font-medium mb-3">Data View Preferences</h4>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="text-sm font-medium">Default View</label>
+                        <Select defaultValue="national">
+                          <SelectTrigger className="mt-1">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="national">National Dashboard</SelectItem>
+                            <SelectItem value="regional">Regional View</SelectItem>
+                            <SelectItem value="state">State-wise View</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="font-medium mb-3">Multi-Factor Authentication</h4>
+                    <div className="flex items-center justify-between p-3 rounded-lg bg-green-50/50 dark:bg-green-950/20 border border-green-200/50">
+                      <div className="flex items-center space-x-2">
+                        <Lock className="h-4 w-4 text-green-500" />
+                        <span className="text-sm font-medium">MFA Enabled</span>
+                      </div>
+                      <Badge className="bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400">Active</Badge>
+                    </div>
+                    <Button variant="outline" size="sm" className="w-full mt-2">
+                      <Settings className="h-4 w-4 mr-2" />
+                      Configure MFA
+                    </Button>
+                  </div>
+
+                  <div className="border-t pt-4">
+                    <Button variant="outline" size="sm" className="w-full">
+                      <Shield className="h-4 w-4 mr-2" />
+                      Change Password
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>

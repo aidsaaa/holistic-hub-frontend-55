@@ -36,7 +36,8 @@ import {
   Calendar,
   Award,
   Zap,
-  Target
+  Target,
+  Lock
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -859,26 +860,325 @@ const AdminDashboard = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="portfolio" className="space-y-6">
+          <TabsContent value="notifications" className="space-y-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold">Administrative Notifications</h2>
+                <p className="text-muted-foreground">Compliance alerts, system notifications, and faculty communications</p>
+              </div>
+              <div className="flex space-x-2">
+                <Button variant="outline" size="sm">
+                  <Filter className="h-4 w-4 mr-2" />
+                  Filter
+                </Button>
+                <Button variant="outline" size="sm">
+                  Mark All Read
+                </Button>
+              </div>
+            </div>
+
+            {/* Notification Categories */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <Card className="glass-card">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <AlertTriangle className="h-5 w-5 text-orange-500" />
+                    <div>
+                      <p className="text-2xl font-bold text-orange-600">5</p>
+                      <p className="text-xs text-muted-foreground">Compliance Alerts</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <Brain className="h-5 w-5 text-purple-500" />
+                    <div>
+                      <p className="text-2xl font-bold text-purple-600">3</p>
+                      <p className="text-xs text-muted-foreground">AI Alerts</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <Award className="h-5 w-5 text-blue-500" />
+                    <div>
+                      <p className="text-2xl font-bold text-blue-600">7</p>
+                      <p className="text-xs text-muted-foreground">Accreditation Tasks</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <MessageSquare className="h-5 w-5 text-green-500" />
+                    <div>
+                      <p className="text-2xl font-bold text-green-600">12</p>
+                      <p className="text-xs text-muted-foreground">Faculty Messages</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Notifications List */}
             <Card className="glass-card">
               <CardHeader>
-                <CardTitle>Portfolio Management</CardTitle>
+                <CardTitle className="flex items-center">
+                  <Bell className="h-5 w-5 mr-2 text-admin-primary" />
+                  Recent Notifications
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">Student portfolio oversight and management coming soon...</p>
+                <div className="space-y-4">
+                  <div className="p-4 rounded-lg bg-orange-50/50 dark:bg-orange-950/20 border border-orange-200/50">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start space-x-3">
+                        <AlertTriangle className="h-5 w-5 text-orange-500 mt-0.5" />
+                        <div>
+                          <h4 className="font-medium text-orange-700 dark:text-orange-400">⚠️ IT Department has lowest attendance (62%)</h4>
+                          <p className="text-sm text-orange-600 dark:text-orange-500 mt-1">
+                            Department requires immediate attention - 28 students below 75% threshold
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-2">2 hours ago • Computer Science Dept</p>
+                        </div>
+                      </div>
+                      <Button size="sm" variant="outline">Take Action</Button>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200/50">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start space-x-3">
+                        <FileText className="h-5 w-5 text-blue-500 mt-0.5" />
+                        <div>
+                          <h4 className="font-medium text-blue-700 dark:text-blue-400">📊 Accreditation report draft is ready for review</h4>
+                          <p className="text-sm text-blue-600 dark:text-blue-500 mt-1">
+                            NAAC self-assessment report has been compiled and requires administrative approval
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-2">4 hours ago • Academic Office</p>
+                        </div>
+                      </div>
+                      <Button size="sm" variant="outline">Review Document</Button>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200/50">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start space-x-3">
+                        <Brain className="h-5 w-5 text-purple-500 mt-0.5" />
+                        <div>
+                          <h4 className="font-medium text-purple-700 dark:text-purple-400">🔮 AI predicts 15% increase in enrollment next semester</h4>
+                          <p className="text-sm text-purple-600 dark:text-purple-500 mt-1">
+                            Predictive analytics suggest significant enrollment growth - resource planning recommended
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-2">1 day ago • AI Analytics</p>
+                        </div>
+                      </div>
+                      <Button size="sm" variant="outline">View Analysis</Button>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-green-50/50 dark:bg-green-950/20 border border-green-200/50">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start space-x-3">
+                        <MessageSquare className="h-5 w-5 text-green-500 mt-0.5" />
+                        <div>
+                          <h4 className="font-medium text-green-700 dark:text-green-400">Faculty Request: Report Approval</h4>
+                          <p className="text-sm text-green-600 dark:text-green-500 mt-1">
+                            Dr. Sarah Wilson has submitted a research publication report for approval
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-2">1 day ago • Dr. Sarah Wilson, CS Dept</p>
+                        </div>
+                      </div>
+                      <Button size="sm" variant="outline">Review Request</Button>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-gray-50/50 dark:bg-gray-950/20 border border-gray-200/50">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start space-x-3">
+                        <CheckCircle className="h-5 w-5 text-gray-500 mt-0.5" />
+                        <div>
+                          <h4 className="font-medium text-gray-700 dark:text-gray-400">✅ NAAC compliance score improved to 94.8%</h4>
+                          <p className="text-sm text-gray-600 dark:text-gray-500 mt-1">
+                            Institutional compliance metrics have improved following recent policy implementations
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-2">2 days ago • Quality Assurance</p>
+                        </div>
+                      </div>
+                      <Badge variant="outline">Acknowledged</Badge>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Quick Communication */}
+                <div className="mt-6 p-4 rounded-lg border bg-muted/10">
+                  <h4 className="font-medium mb-3 flex items-center">
+                    <Send className="h-4 w-4 mr-2 text-admin-primary" />
+                    Send Institutional Announcement
+                  </h4>
+                  <Textarea
+                    placeholder="Type your announcement to faculty and students..."
+                    value={announcementText}
+                    onChange={(e) => setAnnouncementText(e.target.value)}
+                    className="mb-3"
+                  />
+                  <div className="flex justify-between items-center">
+                    <div className="flex space-x-2">
+                      <Button size="sm" variant="outline">
+                        <Users className="h-4 w-4 mr-2" />
+                        To Faculty
+                      </Button>
+                      <Button size="sm" variant="outline">
+                        <GraduationCap className="h-4 w-4 mr-2" />
+                        To Students
+                      </Button>
+                    </div>
+                    <Button size="sm" onClick={handleSendAnnouncement} disabled={!announcementText.trim()}>
+                      <Send className="h-4 w-4 mr-2" />
+                      Send Announcement
+                    </Button>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="achievements" className="space-y-6">
-            <Card className="glass-card">
-              <CardHeader>
-                <CardTitle>Achievement Management</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Student achievement tracking and certification management coming soon...</p>
-              </CardContent>
-            </Card>
+          <TabsContent value="profile" className="space-y-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold">Administrator Profile</h2>
+                <p className="text-muted-foreground">Manage your administrative account and preferences</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Personal Information */}
+              <Card className="glass-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <UserCog className="h-5 w-5 mr-2 text-admin-primary" />
+                    Personal Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium">Full Name</label>
+                    <Input value={user?.name || 'Administrator Priya Nair'} className="mt-1" />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Role</label>
+                    <Input value="Senior Administrator" className="mt-1" />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Institution</label>
+                    <Input value="Delhi Technology Institute" className="mt-1" />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Employee ID</label>
+                    <Input value="ADM-2024-001" className="mt-1" />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Contact Email</label>
+                    <Input value="priya.nair@dti.edu.in" className="mt-1" />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Office Hours</label>
+                    <Input value="Monday - Friday, 9:00 AM - 6:00 PM" className="mt-1" />
+                  </div>
+                  <Button className="w-full mt-4">
+                    <Edit3 className="h-4 w-4 mr-2" />
+                    Update Information
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Preferences & Security */}
+              <Card className="glass-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Settings className="h-5 w-5 mr-2 text-admin-primary" />
+                    Preferences & Security
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <h4 className="font-medium mb-3">Notification Settings</h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm">AI Alerts</span>
+                        <Badge className="bg-green-100 text-green-700">Enabled</Badge>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm">Faculty Messages</span>
+                        <Badge className="bg-green-100 text-green-700">Enabled</Badge>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm">System Reports</span>
+                        <Badge className="bg-green-100 text-green-700">Enabled</Badge>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm">Marketing Updates</span>
+                        <Badge className="bg-gray-100 text-gray-700">Disabled</Badge>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="font-medium mb-3">Dashboard Preferences</h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm">Dark/Light Mode</span>
+                        <Button size="sm" variant="outline">Auto</Button>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Default View</label>
+                        <Select defaultValue="overview">
+                          <SelectTrigger className="mt-1">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="overview">Overview Dashboard</SelectItem>
+                            <SelectItem value="academics">Academic Management</SelectItem>
+                            <SelectItem value="attendance">Attendance Analytics</SelectItem>
+                            <SelectItem value="reports">Reports Center</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="font-medium mb-3">Security Settings</h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between p-3 rounded-lg bg-green-50/50 dark:bg-green-950/20 border border-green-200/50">
+                        <div className="flex items-center space-x-2">
+                          <Shield className="h-4 w-4 text-green-500" />
+                          <span className="text-sm font-medium">Two-Factor Authentication</span>
+                        </div>
+                        <Badge className="bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400">Enabled</Badge>
+                      </div>
+                      <Button variant="outline" size="sm" className="w-full">
+                        <Settings className="h-4 w-4 mr-2" />
+                        Enable 2FA
+                      </Button>
+                      <Button variant="outline" size="sm" className="w-full">
+                        <Lock className="h-4 w-4 mr-2" />
+                        Change Password
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
