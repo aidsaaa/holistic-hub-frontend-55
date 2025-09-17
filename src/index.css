@@ -1,0 +1,269 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smart Student Hub Design System - Professional EdTech Platform
+All colors MUST be HSL for consistency across themes.
+*/
+
+@layer base {
+  :root {
+    /* Base Theme - Light Mode */
+    --background: 240 20% 99%;
+    --foreground: 240 10% 3.9%;
+    
+    /* Glassmorphism Effects */
+    --glass-background: 240 20% 99% / 0.8;
+    --glass-border: 240 20% 90% / 0.3;
+    --glass-shadow: 240 20% 40% / 0.1;
+    
+    /* Card System */
+    --card: 240 20% 98%;
+    --card-foreground: 240 10% 3.9%;
+    --card-glass: 240 20% 99% / 0.9;
+    
+    /* Interactive Elements */
+    --primary: 240 15% 15%;
+    --primary-foreground: 240 20% 99%;
+    --secondary: 240 10% 92%;
+    --secondary-foreground: 240 15% 15%;
+    
+    /* Role-Specific Colors */
+    --student-primary: 217 91% 60%;
+    --student-secondary: 217 91% 85%;
+    --student-accent: 217 91% 70%;
+    --student-gradient-from: 217 91% 60%;
+    --student-gradient-to: 217 91% 40%;
+    
+    --faculty-primary: 262 83% 58%;
+    --faculty-secondary: 262 83% 85%;
+    --faculty-accent: 262 83% 68%;
+    --faculty-gradient-from: 262 83% 58%;
+    --faculty-gradient-to: 262 83% 38%;
+    
+    --admin-primary: 350 89% 60%;
+    --admin-secondary: 350 89% 85%;
+    --admin-accent: 350 89% 70%;
+    --admin-gradient-from: 350 89% 60%;
+    --admin-gradient-to: 262 83% 38%;
+    
+    --government-primary: 158 64% 52%;
+    --government-secondary: 158 64% 85%;
+    --government-accent: 158 64% 62%;
+    --government-gradient-from: 158 64% 52%;
+    --government-gradient-to: 158 64% 32%;
+    
+    /* Status & Feedback */
+    --success: 142 76% 36%;
+    --success-foreground: 355.7 100% 97.3%;
+    --warning: 32 95% 44%;
+    --warning-foreground: 48 96% 89%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    
+    /* UI Elements */
+    --muted: 240 10% 92%;
+    --muted-foreground: 240 5% 40%;
+    --accent: 240 10% 92%;
+    --accent-foreground: 240 15% 15%;
+    --border: 240 10% 90%;
+    --input: 240 10% 94%;
+    --ring: 240 15% 15%;
+    
+    /* Border Radius System */
+    --radius: 0.75rem;
+    --radius-sm: 0.5rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    
+    /* Animation Durations */
+    --duration-fast: 0.15s;
+    --duration-normal: 0.3s;
+    --duration-slow: 0.5s;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(240, 20%, 40%, 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(240, 20%, 40%, 0.1), 0 2px 4px -1px hsl(240, 20%, 40%, 0.06);
+    --shadow-lg: 0 10px 15px -3px hsl(240, 20%, 40%, 0.1), 0 4px 6px -2px hsl(240, 20%, 40%, 0.05);
+    --shadow-xl: 0 20px 25px -5px hsl(240, 20%, 40%, 0.1), 0 10px 10px -5px hsl(240, 20%, 40%, 0.04);
+    --shadow-glow: 0 0 30px -5px;
+    
+    /* Glass Effects */
+    --glass-backdrop: blur(20px);
+    --glass-saturate: saturate(1.8);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Dark Mode Base */
+    --background: 240 20% 6%;
+    --foreground: 240 20% 96%;
+    
+    /* Glassmorphism Effects - Dark */
+    --glass-background: 240 20% 10% / 0.8;
+    --glass-border: 240 20% 30% / 0.3;
+    --glass-shadow: 240 20% 20% / 0.5;
+    
+    /* Cards - Dark */
+    --card: 240 20% 8%;
+    --card-foreground: 240 20% 96%;
+    --card-glass: 240 20% 12% / 0.9;
+    
+    /* Interactive - Dark */
+    --primary: 240 20% 96%;
+    --primary-foreground: 240 20% 6%;
+    --secondary: 240 10% 15%;
+    --secondary-foreground: 240 20% 96%;
+    
+    /* Status - Dark */
+    --success: 142 76% 45%;
+    --warning: 32 95% 55%;
+    --destructive: 0 84.2% 70%;
+    
+    /* UI Elements - Dark */
+    --muted: 240 10% 15%;
+    --muted-foreground: 240 5% 65%;
+    --accent: 240 10% 15%;
+    --accent-foreground: 240 20% 96%;
+    --border: 240 10% 20%;
+    --input: 240 10% 12%;
+    --ring: 240 20% 96%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-muted/20;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+}
+
+@layer components {
+  /* Glass Card Component */
+  .glass-card {
+    @apply backdrop-blur-xl bg-card-glass border border-glass-border shadow-lg;
+    backdrop-filter: var(--glass-backdrop) var(--glass-saturate);
+  }
+  
+  /* Role-based gradient backgrounds */
+  .gradient-student {
+    background: linear-gradient(135deg, hsl(var(--student-gradient-from)), hsl(var(--student-gradient-to)));
+  }
+  
+  .gradient-faculty {
+    background: linear-gradient(135deg, hsl(var(--faculty-gradient-from)), hsl(var(--faculty-gradient-to)));
+  }
+  
+  .gradient-admin {
+    background: linear-gradient(135deg, hsl(var(--admin-gradient-from)), hsl(var(--admin-gradient-to)));
+  }
+  
+  .gradient-government {
+    background: linear-gradient(135deg, hsl(var(--government-gradient-from)), hsl(var(--government-gradient-to)));
+  }
+  
+  /* Glow effects for role cards */
+  .glow-student {
+    box-shadow: var(--shadow-glow) hsl(var(--student-primary) / 0.3);
+  }
+  
+  .glow-faculty {
+    box-shadow: var(--shadow-glow) hsl(var(--faculty-primary) / 0.3);
+  }
+  
+  .glow-admin {
+    box-shadow: var(--shadow-glow) hsl(var(--admin-primary) / 0.3);
+  }
+  
+  .glow-government {
+    box-shadow: var(--shadow-glow) hsl(var(--government-primary) / 0.3);
+  }
+  
+  /* Animation utilities */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-glow-pulse {
+    animation: glow-pulse 2s ease-in-out infinite alternate;
+  }
+  
+  /* Focus ring for accessibility */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background;
+  }
+}
+
+@layer utilities {
+  /* Text gradient utilities */
+  .text-gradient-student {
+    @apply bg-gradient-to-r from-student-primary to-student-accent bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-faculty {
+    @apply bg-gradient-to-r from-faculty-primary to-faculty-accent bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-admin {
+    @apply bg-gradient-to-r from-admin-primary to-admin-accent bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-government {
+    @apply bg-gradient-to-r from-government-primary to-government-accent bg-clip-text text-transparent;
+  }
+}
+
+/* Keyframe animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes glow-pulse {
+  from {
+    box-shadow: 0 0 20px -10px currentColor;
+  }
+  to {
+    box-shadow: 0 0 40px -5px currentColor;
+  }
+}
