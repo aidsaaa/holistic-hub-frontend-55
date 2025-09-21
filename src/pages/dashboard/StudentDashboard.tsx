@@ -4,7 +4,7 @@ import { UtilityBar } from '@/components/shared/UtilityBar';
 import { AssignmentSubmissionForm } from '@/components/forms/AssignmentSubmissionForm';
 import { WelcomeOverview } from '@/components/dashboard/student/WelcomeOverview';
 import { AcademicsModule } from '@/components/dashboard/student/AcademicsModule';
-import { ActivitySkillsTracker } from '@/components/dashboard/student/ActivitySkillsTracker';
+import { StudentActivityTracker } from '@/components/dashboard/student/StudentActivityTracker';
 import { CareerTwin } from '@/components/dashboard/student/CareerTwin';
 import { Portfolio } from '@/components/dashboard/student/Portfolio';
 import { Gamification } from '@/components/dashboard/student/Gamification';
@@ -57,7 +57,7 @@ const StudentDashboard = () => {
               value="activities"
               className="data-[state=active]:bg-student-primary/20 data-[state=active]:text-student-primary data-[state=active]:border-b-2 data-[state=active]:border-student-primary"
             >
-              Skills & Activities
+              Activity Tracker
             </TabsTrigger>
             <TabsTrigger 
               value="career"
@@ -92,7 +92,7 @@ const StudentDashboard = () => {
           </TabsContent>
 
           <TabsContent value="activities" className="space-y-6">
-            <ActivitySkillsTracker />
+            <StudentActivityTracker />
           </TabsContent>
 
           <TabsContent value="career" className="space-y-6">
