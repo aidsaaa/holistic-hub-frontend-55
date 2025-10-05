@@ -43,7 +43,7 @@ export const FacultyApprovalWorkflow = () => {
   const [activeTab, setActiveTab] = useState('pending');
   const [digitalSignature, setDigitalSignature] = useState('');
 
-  const [submissions, setSubmissions] = useState([
+  const [submissions, setSubmissions] = useState<any[]>([
     {
       id: 1,
       student: {
@@ -275,13 +275,13 @@ export const FacultyApprovalWorkflow = () => {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'conferences': return <Award className="h-4 w-4" />;
-      case 'certifications': return <FileCheck className="h-4 w-4" />;
-      case 'competitions': return <Star className="h-4 w-4" />;
-      case 'internships': return <Briefcase className="h-4 w-4" />;
-      case 'community_service': return <Heart className="h-4 w-4" />;
-      case 'club_activities': return <Users className="h-4 w-4" />;
-      default: return <FileText className="h-4 w-4" />;
+      case 'conferences': return Award;
+      case 'certifications': return FileCheck;
+      case 'competitions': return Star;
+      case 'internships': return Briefcase;
+      case 'community_service': return Heart;
+      case 'club_activities': return Users;
+      default: return FileText;
     }
   };
 
