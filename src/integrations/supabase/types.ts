@@ -14,16 +14,302 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      activities: {
+        Row: {
+          activity_date: string
+          category: Database["public"]["Enums"]["activity_category"]
+          created_at: string
+          description: string
+          duration: string | null
+          id: string
+          location: string | null
+          organization: string | null
+          participants: string | null
+          rank: string | null
+          skills: string[] | null
+          student_id: string
+          title: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          activity_date: string
+          category: Database["public"]["Enums"]["activity_category"]
+          created_at?: string
+          description: string
+          duration?: string | null
+          id?: string
+          location?: string | null
+          organization?: string | null
+          participants?: string | null
+          rank?: string | null
+          skills?: string[] | null
+          student_id: string
+          title: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          activity_date?: string
+          category?: Database["public"]["Enums"]["activity_category"]
+          created_at?: string
+          description?: string
+          duration?: string | null
+          id?: string
+          location?: string | null
+          organization?: string | null
+          participants?: string | null
+          rank?: string | null
+          skills?: string[] | null
+          student_id?: string
+          title?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      approvals: {
+        Row: {
+          approved_at: string
+          blockchain_hash: string | null
+          digital_signature: string | null
+          faculty_id: string
+          feedback: string
+          id: string
+          marks: number | null
+          status: Database["public"]["Enums"]["submission_status"]
+          submission_id: string
+        }
+        Insert: {
+          approved_at?: string
+          blockchain_hash?: string | null
+          digital_signature?: string | null
+          faculty_id: string
+          feedback: string
+          id?: string
+          marks?: number | null
+          status: Database["public"]["Enums"]["submission_status"]
+          submission_id: string
+        }
+        Update: {
+          approved_at?: string
+          blockchain_hash?: string | null
+          digital_signature?: string | null
+          faculty_id?: string
+          feedback?: string
+          id?: string
+          marks?: number | null
+          status?: Database["public"]["Enums"]["submission_status"]
+          submission_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approvals_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "submissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      portfolios: {
+        Row: {
+          blockchain_hash: string | null
+          blockchain_verified: boolean | null
+          generated_at: string
+          id: string
+          pdf_url: string | null
+          student_id: string
+          updated_at: string
+          web_url: string | null
+        }
+        Insert: {
+          blockchain_hash?: string | null
+          blockchain_verified?: boolean | null
+          generated_at?: string
+          id?: string
+          pdf_url?: string | null
+          student_id: string
+          updated_at?: string
+          web_url?: string | null
+        }
+        Update: {
+          blockchain_hash?: string | null
+          blockchain_verified?: boolean | null
+          generated_at?: string
+          id?: string
+          pdf_url?: string | null
+          student_id?: string
+          updated_at?: string
+          web_url?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          department: string | null
+          email: string
+          full_name: string
+          id: string
+          program: string | null
+          roll_number: string | null
+          updated_at: string
+          year: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          department?: string | null
+          email: string
+          full_name: string
+          id: string
+          program?: string | null
+          roll_number?: string | null
+          updated_at?: string
+          year?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          department?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          program?: string | null
+          roll_number?: string | null
+          updated_at?: string
+          year?: string | null
+        }
+        Relationships: []
+      }
+      submissions: {
+        Row: {
+          activity_id: string
+          files: string[] | null
+          id: string
+          max_marks: number
+          status: Database["public"]["Enums"]["submission_status"]
+          student_id: string
+          submitted_at: string
+          suggested_points: number | null
+          updated_at: string
+        }
+        Insert: {
+          activity_id: string
+          files?: string[] | null
+          id?: string
+          max_marks?: number
+          status?: Database["public"]["Enums"]["submission_status"]
+          student_id: string
+          submitted_at?: string
+          suggested_points?: number | null
+          updated_at?: string
+        }
+        Update: {
+          activity_id?: string
+          files?: string[] | null
+          id?: string
+          max_marks?: number
+          status?: Database["public"]["Enums"]["submission_status"]
+          student_id?: string
+          submitted_at?: string
+          suggested_points?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "submissions_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      verification_data: {
+        Row: {
+          ai_content_risk: number | null
+          created_at: string
+          cross_reference: string | null
+          document_authenticity: number | null
+          id: string
+          plagiarism_risk: number | null
+          submission_id: string
+        }
+        Insert: {
+          ai_content_risk?: number | null
+          created_at?: string
+          cross_reference?: string | null
+          document_authenticity?: number | null
+          id?: string
+          plagiarism_risk?: number | null
+          submission_id: string
+        }
+        Update: {
+          ai_content_risk?: number | null
+          created_at?: string
+          cross_reference?: string | null
+          document_authenticity?: number | null
+          id?: string
+          plagiarism_risk?: number | null
+          submission_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "verification_data_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "submissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      activity_category:
+        | "conferences"
+        | "certifications"
+        | "club_activities"
+        | "internships"
+        | "community_service"
+        | "competitions"
+      app_role: "student" | "faculty" | "admin" | "government"
+      submission_status: "pending" | "approved" | "rejected" | "under_review"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +436,17 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      activity_category: [
+        "conferences",
+        "certifications",
+        "club_activities",
+        "internships",
+        "community_service",
+        "competitions",
+      ],
+      app_role: ["student", "faculty", "admin", "government"],
+      submission_status: ["pending", "approved", "rejected", "under_review"],
+    },
   },
 } as const

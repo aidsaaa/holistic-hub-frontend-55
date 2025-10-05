@@ -2,11 +2,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 // Pages
+import Index from "./pages/Index";
+import Auth from "./pages/Auth";
 import LoginSelector from "./pages/LoginSelector";
 import StudentLogin from "./pages/login/StudentLogin";
 import FacultyLogin from "./pages/login/FacultyLogin";
@@ -32,10 +34,9 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            {/* Root redirect to login */}
-            <Route path="/" element={<Navigate to="/login" replace />} />
-            
-            {/* Login Routes */}
+            {/* Public Routes */}
+            <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
             <Route path="/login" element={<LoginSelector />} />
             <Route path="/login/student" element={<StudentLogin />} />
             <Route path="/login/faculty" element={<FacultyLogin />} />
@@ -46,7 +47,7 @@ const App = () => (
             <Route 
               path="/dashboard/student" 
               element={
-                <ProtectedRoute requiredRole="student">
+                <ProtectedRoute>
                   <StudentDashboard />
                 </ProtectedRoute>
               } 
@@ -54,7 +55,7 @@ const App = () => (
             <Route 
               path="/dashboard/faculty" 
               element={
-                <ProtectedRoute requiredRole="faculty">
+                <ProtectedRoute>
                   <FacultyDashboard />
                 </ProtectedRoute>
               } 
@@ -62,7 +63,7 @@ const App = () => (
             <Route 
               path="/dashboard/admin" 
               element={
-                <ProtectedRoute requiredRole="admin">
+                <ProtectedRoute>
                   <AdminDashboard />
                 </ProtectedRoute>
               } 
@@ -70,7 +71,7 @@ const App = () => (
             <Route 
               path="/dashboard/government" 
               element={
-                <ProtectedRoute requiredRole="government">
+                <ProtectedRoute>
                   <GovernmentDashboard />
                 </ProtectedRoute>
               } 
@@ -80,7 +81,7 @@ const App = () => (
             <Route 
               path="/attendance/student" 
               element={
-                <ProtectedRoute requiredRole="student">
+                <ProtectedRoute>
                   <StudentAttendance />
                 </ProtectedRoute>
               } 
@@ -88,7 +89,7 @@ const App = () => (
             <Route 
               path="/attendance/faculty" 
               element={
-                <ProtectedRoute requiredRole="faculty">
+                <ProtectedRoute>
                   <FacultyAttendance />
                 </ProtectedRoute>
               } 
@@ -96,7 +97,7 @@ const App = () => (
             <Route 
               path="/attendance/admin" 
               element={
-                <ProtectedRoute requiredRole="admin">
+                <ProtectedRoute>
                   <AdminAttendance />
                 </ProtectedRoute>
               } 
@@ -104,7 +105,7 @@ const App = () => (
             <Route 
               path="/attendance/government" 
               element={
-                <ProtectedRoute requiredRole="government">
+                <ProtectedRoute>
                   <GovernmentAttendance />
                 </ProtectedRoute>
               } 
